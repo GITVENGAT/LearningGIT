@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Experiences{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+url('https://images.unsplash.com/photo-1502877338535-766e1452684a');
+background-size:cover;
+background-position:center;
+">
+
+<h1 style="text-align:center;padding-top:100px;">
+Premium F1 Experiences
+</h1>
+
+<div class="grid">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1518546305927-5a555bb7020d">
+<h3>Paddock Access</h3>
+<p>Get behind-the-scenes access to teams and garages</p>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70">
+<h3>VIP Hospitality</h3>
+<p>Luxury lounges, premium seating & gourmet dining</p>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1519681393784-d120267933ba">
+<h3>Live Analytics</h3>
+<p>Real-time race data, driver stats & telemetry insights</p>
+</div>
+
+</div>
+
+</div>
+
+<script>
+document.querySelectorAll("a").forEach(link=>{
+link.addEventListener("click",()=>{
+document.body.style.opacity="0.5";
+});
+});
+</script>
+
+{% endblock %}

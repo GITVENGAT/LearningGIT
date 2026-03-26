@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title %}{% endblock %}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI'}
+
+body{
+margin:0;
+color:white;
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+}
+
+/* NAVBAR */
+header{
+display:flex;
+justify-content:space-between;
+padding:20px 60px;
+background: rgba(0,0,0,0.6);
+backdrop-filter: blur(10px);
+position:fixed;
+width:100%;
+z-index:100;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:#ff3c3c;
+}
+
+nav a{
+margin-left:25px;
+color:white;
+text-decoration:none;
+font-weight:500;
+transition:0.3s;
+}
+
+nav a:hover{
+color:#ff3c3c;
+}
+
+/* COMMON */
+.overlay{
+background:rgba(0,0,0,0.7);
+min-height:100vh;
+padding-top:100px;
+}
+
+.grid{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+padding:40px;
+}
+
+.card{
+width:300px;
+margin:20px;
+border-radius:15px;
+overflow:hidden;
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+transition:0.4s;
+}
+
+.card:hover{
+transform:scale(1.05);
+box-shadow:0 10px 30px rgba(0,0,0,0.6);
+}
+
+.card img{
+width:100%;
+height:200px;
+object-fit:cover;
+}
+
+.btn{
+background:linear-gradient(45deg,#ff0000,#ff7300);
+border:none;
+padding:10px 15px;
+color:white;
+border-radius:5px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.btn:hover{
+transform:scale(1.1);
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+<div class="logo">F1 Tickets</div>
+<nav>
+<a href="/">Home</a>
+<a href="/events">Events</a>
+<a href="/experience">Experiences</a>
+<a href="/dashboard">Dashboard</a>
+<a href="/my-tickets">My Tickets</a>
+
+{% if session.get("user") %}
+<a href="/logout">Logout</a>
+{% else %}
+<a href="/login-page">Login</a>
+{% endif %}
+
+</nav>
+</header>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+url('https://images.unsplash.com/photo-1503376780353-7e6692767b70');
+background-size:cover;
+background-position:center;
+">
+
+<h1 style="text-align:center;padding-top:100px;">
+Live F1 Dashboard
+</h1>
+
+<!-- DRIVER CARDS -->
+<div class="grid">
+
+<div class="card">
+<img src="https://media.formula1.com/image/upload/f_auto,q_auto/v1677069367/fom-website/drivers/Max_Verstappen.jpg">
+<h3>Max Verstappen</h3>
+<p>Red Bull Racing</p>
+</div>
+
+<div class="card">
+<img src="https://media.formula1.com/image/upload/f_auto,q_auto/v1677069367/fom-website/drivers/Lewis_Hamilton.jpg">
+<h3>Lewis Hamilton</h3>
+<p>Mercedes AMG</p>
+</div>
+
+<div class="card">
+<img src="https://media.formula1.com/image/upload/f_auto,q_auto/v1677069367/fom-website/drivers/Charles_Leclerc.jpg">
+<h3>Charles Leclerc</h3>
+<p>Ferrari</p>
+</div>
+
+</div>
+
+<!-- LIVE DATA SECTION -->
+<div style="text-align:center;margin-top:30px;">
+
+<h2>Live Data</h2>
+
+<select onchange="loadData(this.value)">
+<option>Select</option>
+<option value="teams">Teams</option>
+<option value="drivers">Drivers</option>
+<option value="results">Results</option>
+<option value="poll">Fan Poll</option>
+</select>
+
+<div id="output" style="
+margin-top:20px;
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:10px;
+width:60%;
+margin-left:auto;
+margin-right:auto;
+"></div>
+
+</div>
+
+</div>
+
+<script>
+
+/* DASHBOARD DATA */
+async function loadData(val){
+
+let out = document.getElementById("output");
+out.innerHTML = "Loading...";
+
+try {
+
+if(val === "teams"){
+let res = await fetch("/teams");
+let data = await res.json();
+
+out.innerHTML = `
+<h3>Teams</h3>
+<ul>${data.map(t => `<li>${t}</li>`).join("")}</ul>
+`;
+}
+
+else if(val === "drivers"){
+let res = await fetch("/drivers");
+let data = await res.json();
+
+out.innerHTML = `
+<h3>Drivers</h3>
+<ul>${data.map(d => `<li>${d}</li>`).join("")}</ul>
+`;
+}
+
+else if(val === "results"){
+let res = await fetch("/results");
+let data = await res.json();
+
+out.innerHTML = `
+<h3>Race Results</h3>
+<ol>${data.map(r => `<li>${r}</li>`).join("")}</ol>
+`;
+}
+
+else if(val === "poll"){
+out.innerHTML = `
+<h3>Fan Prediction Poll</h3>
+
+<button onclick="vote('Verstappen')">Verstappen</button>
+<button onclick="vote('Hamilton')">Hamilton</button>
+<button onclick="vote('Leclerc')">Leclerc</button>
+
+<div id="voteResult" style="margin-top:15px;"></div>
+`;
+
+loadPollResults();
+}
+
+} catch(err){
+out.innerHTML = "⚠️ Error loading data";
+}
+
+}
+
+/* POLL SYSTEM */
+async function vote(name){
+await fetch("/vote",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({driver:name})
+});
+loadPollResults();
+}
+
+async function loadPollResults(){
+let res=await fetch("/poll-results");
+let data=await res.json();
+
+document.getElementById("voteResult").innerHTML =
+data.map(d=>d[0]+" : "+d[1]+" votes").join("<br>");
+}
+
+/* SMOOTH NAVIGATION */
+document.querySelectorAll("a").forEach(link=>{
+link.addEventListener("click",()=>{
+document.body.style.opacity="0.5";
+});
+});
+
+</script>
+
+{% endblock %}

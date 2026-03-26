@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c');
+background-size:cover;
+background-position:center;
+">
+
+<div style="display:flex;justify-content:center;align-items:center;height:100vh;">
+
+<div class="login-box">
+
+<h2 style="text-align:center;">Login</h2>
+
+<input id="loginUser" placeholder="Username">
+<input id="loginPass" type="password" placeholder="Password">
+
+<button class="btn" onclick="loginUser()">Login</button>
+
+<p style="text-align:center;margin-top:10px;">
+Don’t have an account?
+<a href="#" onclick="alert('Signup not added yet')" style="color:#ff3c3c;">Sign Up</a>
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+async function loginUser(){
+let username=document.getElementById("loginUser").value;
+let password=document.getElementById("loginPass").value;
+
+let res=await fetch("/login",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({username,password})
+});
+
+let data=await res.json();
+
+if(data.msg === "Login success"){
+window.location.href="/dashboard";
+}else{
+alert(data.msg);
+}
+}
+
+/* smooth navigation */
+document.querySelectorAll("a").forEach(link=>{
+link.addEventListener("click",()=>{
+document.body.style.opacity="0.5";
+});
+});
+
+</script>
+
+{% endblock %}

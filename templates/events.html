@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Events{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+url('https://images.unsplash.com/photo-1549924231-f129b911e442');
+background-size:cover;
+background-position:center;
+">
+
+<h1 style="text-align:center;padding-top:100px;">
+F1 Grand Prix Events
+</h1>
+
+<div class="grid">
+
+<div class="card">
+<img src="https://media.formula1.com/image/upload/f_auto,q_auto/v1677069073/fom-website/2023/Monaco.jpg">
+<h3>Monaco GP</h3>
+<p>Iconic street circuit with tight corners</p>
+
+<button class="btn" onclick="bookTicket('Monaco GP')">
+Book Tickets
+</button>
+</div>
+
+<div class="card">
+<img src="https://media.formula1.com/image/upload/f_auto,q_auto/v1677069155/fom-website/2023/Silverstone.jpg">
+<h3>Silverstone</h3>
+<p>High-speed corners and racing history</p>
+
+<button class="btn" onclick="bookTicket('Silverstone')">
+Book Tickets
+</button>
+</div>
+
+<div class="card">
+<img src="https://media.formula1.com/image/upload/f_auto,q_auto/v1677069195/fom-website/2023/AbuDhabi.jpg">
+<h3>Abu Dhabi</h3>
+<p>Luxury night race finale</p>
+
+<button class="btn" onclick="bookTicket('Abu Dhabi')">
+Book Tickets
+</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+async function bookTicket(event){
+
+let res = await fetch("/book",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({event})
+});
+
+let data = await res.json();
+alert(data.msg);
+}
+
+/* smooth navigation */
+document.querySelectorAll("a").forEach(link=>{
+link.addEventListener("click",()=>{
+document.body.style.opacity="0.5";
+});
+});
+</script>
+
+{% endblock %}

@@ -1,356 +1,46 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<title>F1 Grand Prix Ticket Platform</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-scroll-behavior:smooth;
-}
-
-body{
-background:black;
-color:white;
-}
-
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 40px;
-background:#000;
-position:sticky;
-top:0;
-z-index:1000;
-border-bottom:1px solid #222;
-}
-
-.logo{
-font-size:26px;
-font-weight:bold;
-color:#e10600;
-}
-
-nav a{
-margin-left:25px;
-color:white;
-text-decoration:none;
-font-size:15px;
-cursor:pointer;
-}
-
-.hero{
-height:85vh;
-background:url("https://images.unsplash.com/photo-1541446654331-8f36b20f6c35") center/cover no-repeat;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-background-blend-mode:overlay;
-background-color:rgba(0,0,0,0.5);
-}
-
-.hero h1{
-font-size:60px;
-margin-bottom:15px;
-}
-
-.hero p{
-font-size:20px;
-margin-bottom:30px;
-}
-
-.search-box{
-background:white;
-padding:10px;
-border-radius:5px;
-display:flex;
-width:500px;
-}
-
-.search-box input{
-flex:1;
-border:none;
-padding:10px;
-font-size:16px;
-}
-
-.search-box button{
-background:#e10600;
-border:none;
-color:white;
-padding:10px 20px;
-cursor:pointer;
-}
-
-.section{
-padding:60px 40px;
-}
-
-.section h2{
-text-align:center;
-margin-bottom:40px;
-}
-
-.race-grid{
-display:flex;
-flex-wrap:wrap;
-gap:30px;
-justify-content:center;
-}
-
-.card{
-background:#111;
-border-radius:10px;
-width:280px;
-overflow:hidden;
-transition:0.3s;
-}
-
-.card:hover{
-transform:translateY(-10px);
-}
-
-.card img{
-width:100%;
-height:170px;
-object-fit:cover;
-}
-
-.card-body{
-padding:15px;
-}
-
-.price{
-color:#e10600;
-font-size:18px;
-margin-top:10px;
-}
-
-.btn{
-background:#e10600;
-border:none;
-color:white;
-padding:10px 15px;
-margin-top:10px;
-cursor:pointer;
-}
-
-.features{
-display:flex;
-justify-content:space-around;
-flex-wrap:wrap;
-gap:30px;
-text-align:center;
-}
-
-.feature{
-max-width:250px;
-}
-
-footer{
-background:#000;
-padding:30px;
-text-align:center;
-color:#777;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<header>
-
-<div class="logo">F1 Tickets</div>
-
-<nav>
-<a href="#home">Home</a>
-<a href="#events">Grand Prix</a>
-<a href="#experiences">Experiences</a>
-<a href="#hospitality">Hospitality</a>
-<a href="#contact">Contact</a>
-</nav>
-
-</header>
-
-
-<section class="hero" id="home">
-
-<h1>Formula 1 Grand Prix Tickets</h1>
-<p>Official ticket marketplace for the world's fastest racing series</p>
-
-<div class="search-box">
-<input id="searchInput" placeholder="Search Grand Prix or City">
-<button onclick="searchRace()">Search</button>
-</div>
-
-</section>
-
-
-<section class="section" id="events">
-
-<h2>Upcoming Grand Prix Events</h2>
-
-<div class="race-grid" id="raceGrid">
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1502877338535-766e1452684a">
-<div class="card-body">
-<h3>Monaco Grand Prix</h3>
-<p>Luxury street circuit racing</p>
-<div class="price">$450 onwards</div>
-<button class="btn" onclick="bookTicket('Monaco Grand Prix')">Book Tickets</button>
-</div>
-</div>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c">
-<div class="card-body">
-<h3>Silverstone GP</h3>
-<p>Historic British motorsport venue</p>
-<div class="price">$300 onwards</div>
-<button class="btn" onclick="bookTicket('Silverstone GP')">Book Tickets</button>
-</div>
-</div>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf">
-<div class="card-body">
-<h3>Singapore Night Race</h3>
-<p>Iconic night street race</p>
-<div class="price">$520 onwards</div>
-<button class="btn" onclick="bookTicket('Singapore GP')">Book Tickets</button>
-</div>
-</div>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1558980394-d9c2f3dfc7be">
-<div class="card-body">
-<h3>Abu Dhabi GP</h3>
-<p>Season finale championship race</p>
-<div class="price">$480 onwards</div>
-<button class="btn" onclick="bookTicket('Abu Dhabi GP')">Book Tickets</button>
-</div>
-</div>
-
-</div>
-
-</section>
-
-
-<section class="section" id="experiences">
-
-<h2>F1 Experiences</h2>
-
-<div class="features">
-
-<div class="feature">
-<h3>Paddock Club Access</h3>
-<p>Exclusive pit lane walk and VIP race hospitality.</p>
-</div>
-
-<div class="feature">
-<h3>Driver Meet & Greet</h3>
-<p>Interact with top drivers and teams.</p>
-</div>
-
-<div class="feature">
-<h3>Garage Tours</h3>
-<p>Behind-the-scenes team operations access.</p>
-</div>
-
-</div>
-
-</section>
-
-
-<section class="section" id="hospitality">
-
-<h2>Hospitality Packages</h2>
-
-<div class="features">
-
-<div class="feature">
-<h3>Premium Lounge</h3>
-<p>Luxury viewing suites with gourmet dining.</p>
-</div>
-
-<div class="feature">
-<h3>Trackside Terrace</h3>
-<p>Premium race viewing with live commentary.</p>
-</div>
-
-<div class="feature">
-<h3>Corporate Packages</h3>
-<p>Enterprise entertainment experiences for partners.</p>
-</div>
-
-</div>
-
-</section>
-
-
-<section class="section" id="contact">
-
-<h2>Contact Us</h2>
-
-<p style="text-align:center">
-For partnerships, corporate bookings, or technical queries contact our global ticketing team.
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+url('https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2');
+background-size:cover;
+background-position:center;
+">
+
+<div style="text-align:center;padding-top:150px;">
+
+<h1 style="
+font-size:70px;
+background:linear-gradient(90deg,#ff0000,#ff8c00);
+-webkit-background-clip:text;
+color:transparent;
+">
+F1 Grand Prix Tickets
+</h1>
+
+<p style="font-size:22px;margin:20px 0;">
+Speed • Precision • Luxury
 </p>
 
-</section>
+<button class="btn" onclick="window.location.href='/events'">
+Explore Events
+</button>
 
+</div>
 
-<footer>
-
-<p>© 2026 Global F1 Ticket Marketplace | Concept Demo</p>
-
-</footer>
-
+</div>
 
 <script>
-
-function bookTicket(race){
-
-alert("Redirecting to booking for " + race + " Grand Prix");
-
-}
-
-function searchRace(){
-
-let input = document.getElementById("searchInput").value.toLowerCase();
-
-let cards = document.querySelectorAll(".card");
-
-cards.forEach(card => {
-
-let text = card.innerText.toLowerCase();
-
-if(text.includes(input)){
-card.style.display="block";
-}
-else{
-card.style.display="none";
-}
-
+document.querySelectorAll("a").forEach(link=>{
+link.addEventListener("click",()=>{
+document.body.style.opacity="0.5";
 });
-
-}
-
+});
 </script>
 
-</body>
-
-</html>
+{% endblock %}
