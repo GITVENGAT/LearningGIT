@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85)),
+url('https://images.unsplash.com/photo-1556740749-887f6717d7e4');
+background-size:cover;
+background-position:center;
+">
+
+<h1 style="text-align:center;padding-top:100px;">
+Payment Gateway
+</h1>
+
+<div class="grid">
+
+<div class="card" style="padding:20px;text-align:center;">
+<h3>UPI</h3>
+<button class="btn" onclick="pay('UPI')">Pay via UPI</button>
+</div>
+
+<div class="card" style="padding:20px;text-align:center;">
+<h3>Card</h3>
+<button class="btn" onclick="pay('Card')">Pay via Card</button>
+</div>
+
+<div class="card" style="padding:20px;text-align:center;">
+<h3>Cash on Delivery</h3>
+<button class="btn" onclick="pay('COD')">Pay via COD</button>
+</div>
+
+</div>
+
+<div id="paymentResult" style="text-align:center;margin-top:30px;"></div>
+
+<script>
+async function pay(method){
+    let res = await fetch("/process-payment",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({method})
+    });
+
+    let payment = await res.json();
+
+    let payload = {
+        pincode: localStorage.getItem("pincode"),
+        address: localStorage.getItem("address"),
+        phone: localStorage.getItem("phone"),
+        alt_phone: localStorage.getItem("alt_phone"),
+        email: localStorage.getItem("email")
+    };
+
+    let orderRes = await fetch("/place-order",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload)
+    });
+
+    let order = await orderRes.json();
+
+    document.getElementById("paymentResult").innerHTML = `
+        <h2>${payment.msg}</h2>
+        <p><b>Transaction:</b> ${payment.transaction_id}</p>
+        <p><b>Method:</b> ${payment.method}</p>
+        <p><b>Tracking ID:</b> ${order.tracking_id}</p>
+        <p>${order.status}</p>
+    `;
+}
+</script>
+
+</div>
+
+{% endblock %}

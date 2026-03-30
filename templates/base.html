@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI'}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI';
+}
 
 body{
 margin:0;
@@ -101,20 +106,25 @@ transform:scale(1.1);
 
 <header>
 <div class="logo">F1 Tickets</div>
+
 <nav>
 <a href="/">Home</a>
 <a href="/events">Events</a>
 <a href="/experience">Experiences</a>
 <a href="/dashboard">Dashboard</a>
 <a href="/my-tickets">My Tickets</a>
+<a href="/merchandise">Merchandise</a>
+<a href="/cart">Cart</a>
+<a href="/my-orders">My Orders</a>
+<a href="/admin">Admin</a>
 
 {% if session.get("user") %}
 <a href="/logout">Logout</a>
 {% else %}
 <a href="/login-page">Login</a>
 {% endif %}
-
 </nav>
+
 </header>
 
 {% block content %}{% endblock %}

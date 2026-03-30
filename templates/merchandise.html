@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Merchandise{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+url('https://images.unsplash.com/photo-1503376780353-7e6692767b70');
+background-size:cover;
+background-position:center;
+">
+
+<h1 style="text-align:center;padding-top:100px;">
+F1 Team Merchandise Store
+</h1>
+
+<div class="grid">
+
+{% for c in categories %}
+<div class="card">
+<h3>{{ c }}</h3>
+<p>Explore premium {{ c }} collection</p>
+
+<button class="btn" onclick="window.location.href='/category/{{ c }}'">
+Open Category
+</button>
+</div>
+{% endfor %}
+
+</div>
+</div>
+
+{% endblock %}

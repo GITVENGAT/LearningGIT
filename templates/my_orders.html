@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)),
+url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c');
+background-size:cover;
+background-position:center;
+">
+
+<h1 style="text-align:center;padding-top:100px;">
+My Merchandise Orders
+</h1>
+
+<div class="grid">
+
+{% for order in orders %}
+<div class="card" style="padding:20px;">
+<h3>Tracking: {{ order[0] }}</h3>
+<p><b>Address:</b> {{ order[1] }}</p>
+<p><b>Phone:</b> {{ order[2] }}</p>
+<p><b>Email:</b> {{ order[3] }}</p>
+<p><b>Status:</b> {{ order[4] }}</p>
+</div>
+{% endfor %}
+
+</div>
+
+</div>
+
+{% endblock %}

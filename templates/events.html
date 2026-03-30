@@ -19,7 +19,7 @@ F1 Grand Prix Events
 <div class="grid">
 
 <div class="card">
-<img src="https://media.formula1.com/image/upload/f_auto,q_auto/v1677069073/fom-website/2023/Monaco.jpg">
+<img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70">
 <h3>Monaco GP</h3>
 <p>Iconic street circuit with tight corners</p>
 
@@ -29,7 +29,7 @@ Book Tickets
 </div>
 
 <div class="card">
-<img src="https://media.formula1.com/image/upload/f_auto,q_auto/v1677069155/fom-website/2023/Silverstone.jpg">
+<img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341">
 <h3>Silverstone</h3>
 <p>High-speed corners and racing history</p>
 
@@ -39,7 +39,7 @@ Book Tickets
 </div>
 
 <div class="card">
-<img src="https://media.formula1.com/image/upload/f_auto,q_auto/v1677069195/fom-website/2023/AbuDhabi.jpg">
+<img src="https://images.unsplash.com/photo-1518546305927-5a555bb7020d">
 <h3>Abu Dhabi</h3>
 <p>Luxury night race finale</p>
 
@@ -62,8 +62,16 @@ body:JSON.stringify({event})
 });
 
 let data = await res.json();
-alert(data.msg);
+
+if(data.msg === "Login required"){
+alert("Please login first");
+window.location.href="/login-page";
+}else{
+alert("Ticket booked successfully");
+window.location.href="/my-tickets";
 }
+}
+</script>
 
 /* smooth navigation */
 document.querySelectorAll("a").forEach(link=>{

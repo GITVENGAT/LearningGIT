@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category }}{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+url('https://images.unsplash.com/photo-1517649763962-0c623066013b');
+background-size:cover;
+background-position:center;
+">
+
+<h1 style="text-align:center;padding-top:100px;">
+{{ category }}
+</h1>
+
+<div class="grid">
+
+{% for item in items %}
+<div class="card">
+<img src="{{ item[5] }}">
+<h3>{{ item[3] }}</h3>
+<p>₹{{ item[4] }}</p>
+
+<button class="btn" onclick="addToCart({{ item[0] }})">
+Add to Cart
+</button>
+</div>
+{% endfor %}
+
+</div>
+</div>
+
+<script>
+async function addToCart(product_id){
+    let res = await fetch("/add-to-cart",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({product_id})
+    });
+
+    let data = await res.json();
+
+    if(data.msg === "Login required"){
+        alert("Please login first");
+        window.location.href="/login-page";
+    }else{
+        alert("Item added to cart");
+    }
+}
+</script>
+
+{% endblock %}

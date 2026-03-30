@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85)),
+url('https://images.unsplash.com/photo-1461896836934-ffe607ba8211');
+background-size:cover;
+background-position:center;
+">
+
+<h1 style="text-align:center;padding-top:100px;">
+F1 Marketplace Admin Dashboard
+</h1>
+
+<div class="grid">
+
+<div class="card" style="padding:20px;">
+<h3>Total Users</h3>
+<p>{{ total_users }}</p>
+</div>
+
+<div class="card" style="padding:20px;">
+<h3>Total Tickets Booked</h3>
+<p>{{ total_tickets }}</p>
+</div>
+
+<div class="card" style="padding:20px;">
+<h3>Total Orders</h3>
+<p>{{ total_orders }}</p>
+</div>
+
+<div class="card" style="padding:20px;">
+<h3>Revenue</h3>
+<p>₹{{ revenue }}</p>
+</div>
+
+</div>
+
+<h2 style="text-align:center;">Recent Orders</h2>
+
+<div class="grid">
+{% for order in recent_orders %}
+<div class="card" style="padding:20px;">
+<h3>{{ order[0] }}</h3>
+<p>{{ order[1] }}</p>
+<p>{{ order[2] }}</p>
+</div>
+{% endfor %}
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+url('https://images.unsplash.com/photo-1503376780353-7e6692767b70');
+background-size:cover;
+background-position:center;
+">
+
+<h1 style="text-align:center;padding-top:100px;">
+My Cart
+</h1>
+
+<div class="grid">
+
+{% for item in items %}
+<div class="card">
+<img src="{{ item[3] }}">
+<h3>{{ item[1] }}</h3>
+<p>₹{{ item[2] }}</p>
+</div>
+{% endfor %}
+
+</div>
+
+<div style="text-align:center;padding-bottom:50px;">
+<button class="btn" onclick="window.location.href='/checkout'">
+Proceed to Checkout
+</button>
+</div>
+
+</div>
+
+{% endblock %}
