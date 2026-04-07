@@ -1,35 +1,66 @@
+<!-- ========================= my_orders.html ========================= -->
 {% extends "base.html" %}
-
 {% block title %}My Orders{% endblock %}
 
 {% block content %}
-
 <div class="overlay" style="
 background:
-linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)),
-url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c');
+linear-gradient(rgba(0,0,0,0.82),rgba(0,0,0,0.82)),
+url('{{ url_for('static', filename='images/f1-banner.jpg') }}');
 background-size:cover;
 background-position:center;
+min-height:100vh;
+padding:40px;
+color:white;
 ">
 
-<h1 style="text-align:center;padding-top:100px;">
-My Merchandise Orders
-</h1>
+<h1 class="page-title">📦 My Orders & Live Tracking</h1>
 
-<div class="grid">
-
+{% if orders %}
 {% for order in orders %}
-<div class="card" style="padding:20px;">
-<h3>Tracking: {{ order[0] }}</h3>
-<p><b>Address:</b> {{ order[1] }}</p>
-<p><b>Phone:</b> {{ order[2] }}</p>
-<p><b>Email:</b> {{ order[3] }}</p>
-<p><b>Status:</b> {{ order[4] }}</p>
+<div class="glass-card" style="margin-bottom:30px;padding:25px;color:white;width:100%;max-width:900px;margin-left:auto;margin-right:auto;">
+    <h3>📦 Tracking ID: {{ order.tracking_id }}</h3>
+    <p>📍 {{ order.address }}</p>
+    <p>📞 {{ order.phone }}</p>
+    <p>📧 {{ order.email }}</p>
+    <p><b>Status:</b> {{ order.status }}</p>
+
+    <hr style="margin:20px 0;border-color:rgba(255,255,255,0.1);">
+
+    <h3>🚚 Shipment Timeline</h3>
+
+    <div style="display:flex;flex-direction:column;gap:15px;margin-top:20px;">
+        {% for log in order.logs %}
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            padding:14px 18px;
+            border-radius:12px;
+            background:
+            {% if loop.index0 <= order.progress_index %}
+            rgba(0,255,120,0.18)
+            {% else %}
+            rgba(255,255,255,0.04)
+            {% endif %};
+        ">
+            <span>
+                {% if loop.index0 <= order.progress_index %}✅{% else %}⏳{% endif %}
+                {{ log.stage }}
+            </span>
+            <span style="font-size:13px;color:#bbb;">{{ log.time }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div style="text-align:center;margin-top:25px;">
+        <a href="/notifications" class="btn">🔔 View Notifications</a>
+    </div>
 </div>
 {% endfor %}
-
+{% else %}
+<div class="glass-card" style="max-width:600px;margin:40px auto;text-align:center;padding:40px;color:#ff8888;">
+No orders placed yet 🚫
 </div>
-
+{% endif %}
 </div>
-
 {% endblock %}

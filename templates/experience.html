@@ -6,46 +6,130 @@
 
 <div class="overlay" style="
 background:
-linear-gradient(rgba(32, 210, 97, 0.7),rgba(187, 225, 18, 0.7)),
-url('https://images.unsplash.com/photo-1502877338535-766e1452684a');
+linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),
+url('{{ url_for('static', filename='images/f1-banner.jpg') }}');
 background-size:cover;
 background-position:center;
+min-height:100vh;
+padding:40px;
 ">
 
-<h1 style="text-align:center;padding-top:100px;">
-Premium F1 Experiences
+<h1 style="text-align:center; margin-bottom:40px;">
+🏁 Premium F1 Experiences
 </h1>
 
-<div class="grid">
+<div class="grid" style="
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+">
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1518546305927-5a555bb7020d">
-<h3>Paddock Access</h3>
-<p>Get behind-the-scenes access to teams and garages</p>
+    <div class="card" style="cursor:pointer;transition:0.3s;overflow:hidden;" onclick="showSummary('pitwalk')">
+        <img src="{{ url_for('static', filename='images/f1-car.jpg') }}">
+        <h3 style="padding:15px;">Pit Lane Walk</h3>
+    </div>
+
+    <div class="card" style="cursor:pointer;transition:0.3s;overflow:hidden;" onclick="showSummary('garage')">
+        <img src="{{ url_for('static', filename='images/f1-home.jpg') }}">
+        <h3 style="padding:15px;">Garage Tour</h3>
+    </div>
+
+    <div class="card" style="cursor:pointer;transition:0.3s;overflow:hidden;" onclick="showSummary('podium')">
+        <img src="{{ url_for('static', filename='images/f1-banner.jpg') }}">
+        <h3 style="padding:15px;">Podium Celebration</h3>
+    </div>
+
+    <div class="card" style="cursor:pointer;transition:0.3s;overflow:hidden;" onclick="showSummary('simulator')">
+        <img src="{{ url_for('static', filename='images/f1-home.jpg') }}">
+        <h3 style="padding:15px;">Racing Simulator</h3>
+    </div>
+
+    <div class="card" style="cursor:pointer;transition:0.3s;overflow:hidden;" onclick="showSummary('hospitality')">
+        <img src="{{ url_for('static', filename='images/f1-banner.jpg') }}">
+        <h3 style="padding:15px;">VIP Hospitality</h3>
+    </div>
+
+    <div class="card" style="cursor:pointer;transition:0.3s;overflow:hidden;" onclick="showSummary('meetdriver')">
+        <img src="{{ url_for('static', filename='images/f1-car.jpg') }}">
+        <h3 style="padding:15px;">Meet The Drivers</h3>
+    </div>
+
 </div>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70">
-<h3>VIP Hospitality</h3>
-<p>Luxury lounges, premium seating & gourmet dining</p>
-</div>
+<!-- FULLSCREEN MODAL BACKDROP -->
+<div id="summaryBackdrop" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.65);
+z-index:999;
+" onclick="closeModal()">
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1519681393784-d120267933ba">
-<h3>Live Analytics</h3>
-<p>Real-time race data, driver stats & telemetry insights</p>
-</div>
+    <!-- POPUP MODAL -->
+    <div id="summaryModal" style="
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:rgba(15,15,15,0.98);
+    padding:35px;
+    width:60%;
+    max-height:80vh;
+    overflow-y:auto;
+    border-radius:22px;
+    box-shadow:0 0 35px rgba(255,0,0,0.45);
+    border:1px solid rgba(255,255,255,0.08);
+    " onclick="event.stopPropagation()">
 
-</div>
+        <h2 id="modalTitle"></h2>
+        <p id="modalText" style="line-height:1.8; margin-top:20px;"></p>
 
+        <button class="btn" onclick="closeModal()" style="margin-top:20px;">
+            Close
+        </button>
+
+    </div>
 </div>
 
 <script>
-document.querySelectorAll("a").forEach(link=>{
-link.addEventListener("click",()=>{
-document.body.style.opacity="0.5";
-});
-});
+const summaries = {
+pitwalk: {
+title: "Pit Lane Walk",
+text: "Walk through the most exclusive part of the Formula 1 circuit where teams prepare their cars before the race. Fans can closely witness tire strategies, engineering details, and live pit stop rehearsals. This experience offers an unmatched behind-the-scenes view into the speed and precision of race-day operations. You can watch crew coordination, car setup, and last-minute adjustments. The atmosphere is filled with adrenaline as mechanics work under intense time pressure. It’s a rare opportunity to feel the pulse of the paddock."
+},
+garage: {
+title: "Garage Tour",
+text: "Step inside the team garages and explore how Formula 1 cars are maintained and tuned. This experience includes access to car components, telemetry displays, and team tools. Learn how engineers optimize aerodynamics, brakes, and tire performance. Visitors can understand the complexity of hybrid power units and race strategy planning. The garage environment reveals the technical brilliance behind each lap."
+},
+podium: {
+title: "Podium Celebration",
+text: "Experience the thrill of standing near the podium after the chequered flag. Watch drivers celebrate victory with champagne sprays, team cheers, and trophy moments. This experience captures the emotional climax of a race weekend. You’ll enjoy the electrifying crowd roar and witness historic celebrations from close proximity."
+},
+simulator: {
+title: "Racing Simulator",
+text: "Drive a professional Formula 1 racing simulator built with realistic track physics and cockpit controls. Experience steering precision, braking points, and tire management on iconic circuits. This gives fans a taste of what drivers feel during high-speed corners and overtakes. Perfect for testing reflexes and racing instincts."
+},
+hospitality: {
+title: "VIP Hospitality",
+text: "Enjoy premium race viewing lounges with gourmet food, luxury seating, and trackside panoramic views. This includes exclusive services, driver interviews, and insider commentary. Fans enjoy the Grand Prix weekend in ultimate comfort while staying connected to every racing moment."
+},
+meetdriver: {
+title: "Meet The Drivers",
+text: "Get a once-in-a-lifetime chance to interact with Formula 1 drivers. Fans can take photos, receive signed merchandise, and hear exclusive stories from race weekends. This experience creates unforgettable memories with the stars of motorsport."
+}
+};
+
+function showSummary(type){
+    document.getElementById("summaryBackdrop").style.display = "block";
+    document.getElementById("modalTitle").innerText = summaries[type].title;
+    document.getElementById("modalText").innerText = summaries[type].text;
+}
+
+function closeModal(){
+    document.getElementById("summaryBackdrop").style.display = "none";
+}
 </script>
 
 {% endblock %}

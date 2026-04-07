@@ -6,34 +6,66 @@
 
 <div class="overlay" style="
 background:
-linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
-url('https://images.unsplash.com/photo-1521412644187-c49fa049e84d');
+linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),
+url('{{ url_for('static', filename='images/f1-banner.jpg') }}');
 background-size:cover;
 background-position:center;
+min-height:100vh;
+padding:40px;
 ">
 
-<h1 style="text-align:center;padding-top:100px;">
-My Booked Tickets
+<h1 style="text-align:center; padding-top:60px; margin-bottom:20px;">
+🎟️ My Booked Tickets
 </h1>
 
-<div class="grid">
-
 {% if tickets %}
+<p style="text-align:center; color:#ccc; margin-bottom:30px;">
+    Total Tickets: {{ tickets|length }}
+</p>
 
-{% for t in tickets %}
-<div class="card">
-<h3>{{ t[0] }}</h3>
-<p>Confirmed Booking</p>
+<div class="grid" style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:25px;
+padding:20px;
+">
+
+    {% for ticket in tickets %}
+    <div class="card" style="
+        padding:25px;
+        background:rgba(255,255,255,0.08);
+        border:1px solid rgba(255,255,255,0.1);
+        border-radius:15px;
+        color:white;
+        transition: transform 0.2s;
+    " onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+
+        <h3 style="color:#00ff99; margin-bottom:10px;">🏁 {{ ticket.track }}</h3>
+        <p>📍 {{ ticket.place }}</p>
+        <p>📅 {{ ticket.date }}</p>
+        <p>⏰ {{ ticket.time }}</p>
+
+        <div style="
+            margin-top:15px;
+            padding:10px;
+            background:rgba(0,255,120,0.15);
+            border-radius:10px;
+            text-align:center;
+            font-weight:bold;
+        ">
+            🎟 Confirmed Booking
+        </div>
+    </div>
+    {% endfor %}
+
 </div>
-{% endfor %}
-
 {% else %}
 
-<h2 style="text-align:center;">No tickets booked yet</h2>
+<h2 style="text-align:center; width:100%; color:#ff5555;">
+    No tickets booked yet
+</h2>
 
 {% endif %}
-
-</div>
 
 </div>
 

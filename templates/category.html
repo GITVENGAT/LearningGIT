@@ -16,21 +16,27 @@ background-position:center;
 {{ category }}
 </h1>
 
+{% if items %}
 <div class="grid">
 
 {% for item in items %}
 <div class="card">
-<img src="{{ item[5] }}">
-<h3>{{ item[3] }}</h3>
-<p>₹{{ item[4] }}</p>
+    <img src="{{ item[5] }}">
+    <h3>{{ item[3] }}</h3>
+    <p>₹{{ item[4] }}</p>
 
-<button class="btn" onclick="addToCart({{ item[0] }})">
-Add to Cart
-</button>
+    <button class="btn" onclick="addToCart({{ item[0] }})">
+        Add to Cart
+    </button>
 </div>
 {% endfor %}
 
 </div>
+{% else %}
+<h2 style="text-align:center; color:#ff5555; margin-top:50px;">
+    No products available in this category
+</h2>
+{% endif %}
 </div>
 
 <script>
@@ -47,7 +53,9 @@ async function addToCart(product_id){
         alert("Please login first");
         window.location.href="/login-page";
     }else{
-        alert("Item added to cart");
+        if(confirm("Item added successfully. Go to cart?")){
+            window.location.href="/cart";
+        }
     }
 }
 </script>

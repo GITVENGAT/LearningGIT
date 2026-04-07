@@ -10,39 +10,73 @@ linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
 url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c');
 background-size:cover;
 background-position:center;
+min-height:100vh;
 ">
 
 <div style="display:flex;justify-content:center;align-items:center;height:100vh;">
 
-<div class="login-box">
-<h2 style="text-align:center;">Create Account</h2>
+<div class="login-box" style="
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(12px);
+padding:40px;
+border-radius:18px;
+box-shadow:0 8px 30px rgba(0,0,0,0.35);
+width:350px;
+border:1px solid rgba(255,255,255,0.15);
+">
 
-<input id="signupUser" placeholder="Username">
-<input id="signupPass" type="password" placeholder="Password">
+<h2 style="
+text-align:center;
+margin-bottom:25px;
+font-size:30px;
+font-weight:700;
+letter-spacing:1px;
+">
+    Create Account
+</h2>
 
-<button class="btn" onclick="signupUser()">Sign Up</button>
+<input id="signupUser" placeholder="Username" style="margin-bottom:15px;">
+<input id="signupPass" type="password" placeholder="Password" style="margin-bottom:10px;">
+
+<button class="btn" onclick="signupUser()" style="
+width:100%;
+margin-top:15px;
+padding:12px;
+font-size:16px;
+font-weight:600;
+border-radius:10px;
+">
+    Sign Up
+</button>
+
+<p style="text-align:center;margin-top:15px;">
+    Already have an account?
+    <a href="/login-page" style="color:#23bdbd;text-decoration:none;font-weight:600;">
+        Login
+    </a>
+</p>
+
 </div>
-
 </div>
 </div>
 
 <script>
 async function signupUser(){
-let username = document.getElementById("signupUser").value;
-let password = document.getElementById("signupPass").value;
+    let username = document.getElementById("signupUser").value;
+    let password = document.getElementById("signupPass").value;
 
-let res = await fetch("/signup",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({username,password})
-});
+    let res = await fetch("/signup",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({username,password})
+    });
 
-let data = await res.json();
-alert(data.msg);
+    let data = await res.json();
+    alert(data.msg);
 
-if(data.msg === "Signup success"){
-window.location.href="/login-page";
-}
+    if(data.msg === "Signup success"){
+        window.location.href="/login-page";
+    }
 }
 </script>
 

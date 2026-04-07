@@ -1,41 +1,47 @@
 {% extends "base.html" %}
-
 {% block title %}Checkout{% endblock %}
 
 {% block content %}
-
 <div class="overlay" style="
 background:
 linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)),
 url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c');
 background-size:cover;
 background-position:center;
+min-height:100vh;
+padding:40px;
 ">
 
-<h1 style="text-align:center;padding-top:100px;">
-India Delivery Checkout
-</h1>
+<h1 class="page-title">📦 India Delivery Checkout</h1>
 
-<div class="login-box" style="width:500px;margin:auto;padding:30px;">
-<input id="pincode" placeholder="Enter 6-digit Indian Pincode" oninput="validatePincode()">
-<input id="address" placeholder="Delivery Address" disabled>
-<input id="phone" placeholder="Phone Number" disabled>
-<input id="alt_phone" placeholder="Alternate Number" disabled>
-<input id="email" placeholder="Email ID" disabled>
+<div class="auth-card" style="max-width:520px;">
+    <input class="input" id="pincode" placeholder="Enter 6-digit Indian Pincode" oninput="validatePincode()">
 
-<button class="btn" id="orderBtn" onclick="goPayment()" disabled>
-Continue to Payment
-</button>
+    <input class="input" id="address" placeholder="Delivery Address" disabled style="opacity:0.7;">
+    <input class="input" id="phone" placeholder="Phone Number" disabled style="opacity:0.7;">
+    <input class="input" id="alt_phone" placeholder="Alternate Number" disabled style="opacity:0.7;">
+    <input class="input" id="email" placeholder="Email ID" disabled style="opacity:0.7;">
 
-<div id="tracking" style="margin-top:20px;"></div>
+    <button class="btn" id="orderBtn" onclick="goPayment()" disabled style="
+    width:100%;
+    padding:14px;
+    font-size:16px;
+    font-weight:700;
+    margin-top:10px;
+    ">
+        Continue to Payment
+    </button>
+
+    <p style="text-align:center; margin-top:15px; color:#ccc;">
+    🔒 Secure India-only delivery verification before payment
+    </p>
 </div>
-
 </div>
 
 <script>
-function validatePincode(){
-    let pin = document.getElementById("pincode").value;
-    let valid = /^\d{6}$/.test(pin);
+function validatePincode() {
+    const pin = document.getElementById("pincode").value;
+    const valid = /^\d{6}$/.test(pin);
 
     document.getElementById("address").disabled = !valid;
     document.getElementById("phone").disabled = !valid;
@@ -44,37 +50,25 @@ function validatePincode(){
     document.getElementById("orderBtn").disabled = !valid;
 }
 
-function goPayment(){
-    localStorage.setItem("pincode", document.getElementById("pincode").value);
-    localStorage.setItem("address", document.getElementById("address").value);
-    localStorage.setItem("phone", document.getElementById("phone").value);
-    localStorage.setItem("alt_phone", document.getElementById("alt_phone").value);
-    localStorage.setItem("email", document.getElementById("email").value);
+function goPayment() {
+    const pincode = document.getElementById("pincode").value;
+    const address = document.getElementById("address").value;
+    const phone = document.getElementById("phone").value;
+    const altPhone = document.getElementById("alt_phone").value;
+    const email = document.getElementById("email").value;
 
-    window.location.href="/payment";
-}
+    if(!address || !phone || !altPhone || !email){
+        alert("Please complete all delivery details.");
+        return;
+    }
 
-async function placeOrder(){
-    let payload = {
-        pincode: document.getElementById("pincode").value,
-        address: document.getElementById("address").value,
-        phone: document.getElementById("phone").value,
-        alt_phone: document.getElementById("alt_phone").value,
-        email: document.getElementById("email").value
-    };
+    localStorage.setItem("pincode", pincode);
+    localStorage.setItem("address", address);
+    localStorage.setItem("phone", phone);
+    localStorage.setItem("alt_phone", altPhone);
+    localStorage.setItem("email", email);
 
-    let res = await fetch("/place-order",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(payload)
-    });
-
-    let data = await res.json();
-
-    document.getElementById("tracking").innerHTML = `
-        <h3>${data.tracking_id || data.msg}</h3>
-        <p>${data.status || ""}</p>
-    `;
+    window.location.href = "/payment";
 }
 </script>
 

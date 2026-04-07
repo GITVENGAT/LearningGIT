@@ -14,54 +14,76 @@ background-position:center;
 
 <div style="display:flex;justify-content:center;align-items:center;height:100vh;">
 
-<div class="login-box">
+<div class="login-box" style="
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(12px);
+padding:40px;
+border-radius:18px;
+box-shadow:0 8px 30px rgba(0,0,0,0.35);
+width:350px;
+border:1px solid rgba(255,255,255,0.15);
+">
 
-<h2 style="text-align:center;">Login</h2>
+<h2 style="
+text-align:center;
+margin-bottom:25px;
+font-size:30px;
+font-weight:700;
+letter-spacing:1px;
+">
+    Login
+</h2>
 
-<input id="loginUser" placeholder="Username">
-<input id="loginPass" type="password" placeholder="Password">
+<input id="loginUser" placeholder="Username" style="margin-bottom:15px;">
+<input id="loginPass" type="password" placeholder="Password" style="margin-bottom:10px;">
 
-<button class="btn" onclick="loginUser()">Login</button>
+<button class="btn" onclick="loginUser()" style="
+width:100%;
+margin-top:15px;
+padding:12px;
+font-size:16px;
+font-weight:600;
+border-radius:10px;
+">
+    Login
+</button>
 
-<p style="text-align:center;margin-top:10px;">
-Don’t have an account?
-<a href="/signup-page"> style="color:#23bdbd;">Sign Up</a>
+<p style="text-align:center;margin-top:15px;">
+    Don’t have an account?
+    <a href="/signup-page" style="color:#23bdbd;text-decoration:none;font-weight:600;">
+        Sign Up
+    </a>
 </p>
 
 </div>
-
 </div>
-
 </div>
 
 <script>
+async function loginUser() {
+    let username = document.getElementById("loginUser").value;
+    let password = document.getElementById("loginPass").value;
 
-async function loginUser(){
-let username=document.getElementById("loginUser").value;
-let password=document.getElementById("loginPass").value;
+    let res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    });
 
-let res=await fetch("/login",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({username,password})
-});
+    let data = await res.json();
 
-let data=await res.json();
-
-if(data.msg === "Login success"){
-window.location.href="/dashboard";
-}else{
-alert(data.msg);
+    if (data.msg === "Login success") {
+        window.location.href = "/dashboard";
+    } else {
+        alert(data.msg);
+    }
 }
-}
 
-/* smooth navigation */
-document.querySelectorAll("a").forEach(link=>{
-link.addEventListener("click",()=>{
-document.body.style.opacity="0.5";
+document.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+        document.body.style.opacity = "0.5";
+    });
 });
-});
-
 </script>
 
 {% endblock %}

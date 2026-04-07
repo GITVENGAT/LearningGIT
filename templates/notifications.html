@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.88),rgba(0,0,0,0.88)),
+url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3');
+background-size:cover;
+background-position:center;
+min-height:100vh;
+padding:80px 60px;
+">
+
+<h1 style="
+text-align:center;
+margin-bottom:50px;
+font-size:42px;
+font-weight:700;
+letter-spacing:1px;
+">
+    📧 Notification Center
+</h1>
+
+{% if messages %}
+    {% for note in messages %}
+    <div class="card" style="
+    padding:22px;
+    margin-bottom:20px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:16px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.25);
+    transition:all 0.3s ease;
+    ">
+        <h3 style="
+        margin:0;
+        font-size:20px;
+        font-weight:600;
+        line-height:1.5;
+        ">
+            {{ note[0] }}
+        </h3>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="card" style="
+    padding:25px;
+    text-align:center;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:16px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.25);
+    ">
+        <h3 style="margin:0;font-size:22px;">No notifications yet</h3>
+    </div>
+{% endif %}
+
+</div>
+{% endblock %}
