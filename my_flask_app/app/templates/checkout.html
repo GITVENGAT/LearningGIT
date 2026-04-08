@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+    background:
+    linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+    url('{{ url_for('static', filename='images/checkout-bg.jpg') }}');
+    background-size:cover;
+    background-position:center;
+    min-height:100vh;
+    padding:60px;
+    color:white;
+">
+
+<h1 class="page-title">📦 India Delivery Checkout</h1>
+
+<div class="auth-card" style="max-width:520px; margin:auto;">
+    <input class="input" id="pincode" placeholder="Enter 6-digit Indian Pincode" oninput="validatePincode()">
+
+    <input class="input" id="address" placeholder="Delivery Address" disabled style="opacity:0.7;">
+    <input class="input" id="phone" placeholder="Phone Number" disabled style="opacity:0.7;">
+    <input class="input" id="alt_phone" placeholder="Alternate Number" disabled style="opacity:0.7;">
+    <input class="input" id="email" placeholder="Email ID" disabled style="opacity:0.7;">
+
+    <button class="btn" id="orderBtn" onclick="goPayment()" disabled style="
+        width:100%;
+        padding:14px;
+        font-size:16px;
+        font-weight:700;
+        margin-top:15px;
+    ">
+        🚀 Continue to Payment
+    </button>
+
+    <p style="text-align:center; margin-top:15px; color:#ccc;">
+        🔒 Secure India-only delivery verification before payment
+    </p>
+</div>
+
+</div>
+
+<script>
+function validatePincode() {
+    const pin = document.getElementById("pincode").value;
+    const valid = /^\d{6}$/.test(pin);
+
+    ["address","phone","alt_phone","email","orderBtn"].forEach(id => {
+        const el = document.getElementById(id);
+        el.disabled = !valid;
+        el.style.opacity = valid ? "1" : "0.7";
+    });
+}
+
+function goPayment() {
+    const pincode = document.getElementById("pincode").value;
+    const address = document.getElementById("address").value;
+    const phone = document.getElementById("phone").value;
+    const altPhone = document.getElementById("alt_phone").value;
+    const email = document.getElementById("email").value;
+
+    if(!address || !phone || !altPhone || !email){
+        alert("Please complete all delivery details.");
+        return;
+    }
+
+    localStorage.setItem("pincode", pincode);
+    localStorage.setItem("address", address);
+    localStorage.setItem("phone", phone);
+    localStorage.setItem("alt_phone", altPhone);
+    localStorage.setItem("email", email);
+
+    window.location.href = "/payment";
+}
+</script>
+
+{% endblock %}

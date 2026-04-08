@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c');
+background-size:cover;
+background-position:center;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+">
+
+<div class="login-box">
+
+    <h2>Login</h2>
+
+    <input id="loginUser" placeholder="Username" class="login-input">
+    <input id="loginPass" type="password" placeholder="Password" class="login-input">
+
+    <button class="btn" onclick="loginUser()">Login</button>
+
+    <p class="signup-text">
+        Don’t have an account?
+        <a href="/signup-page">Sign Up</a>
+    </p>
+
+</div>
+</div>
+
+<style>
+.login-box {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+    width: 350px;
+    border: 1px solid rgba(255,255,255,0.15);
+    text-align: center;
+}
+
+.login-box h2 {
+    margin-bottom: 25px;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.login-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 16px;
+}
+
+.login-input::placeholder {
+    color: #ddd;
+}
+
+.btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    border: none;
+    background: #00ff99;
+    color: black;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    background: #00cc7a;
+}
+
+.signup-text {
+    text-align: center;
+    margin-top: 15px;
+    color: #fff;
+}
+
+.signup-text a {
+    color: #23bdbd;
+    text-decoration: none;
+    font-weight: 600;
+}
+</style>
+
+<script>
+async function loginUser() {
+    let username = document.getElementById("loginUser").value;
+    let password = document.getElementById("loginPass").value;
+
+    let res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    });
+
+    let data = await res.json();
+
+    if (data.msg === "Login success") {
+        window.location.href = "/dashboard";
+    } else {
+        alert(data.msg);
+    }
+}
+
+document.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+        document.body.style.opacity = "0.5";
+    });
+});
+</script>
+
+{% endblock %}

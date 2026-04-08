@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- External CSS & JS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}" defer></script>
+
+    <!-- Inline CSS (can be moved to styles.css later) -->
+    <style>
+        * {
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body {
+            margin:0;
+            color:white;
+            background:#0b0b0b;
+            overflow-x:hidden;
+            transition:0.3s ease;
+        }
+
+        header {
+            display:flex;
+            flex-wrap:wrap;
+            justify-content:space-between;
+            align-items:center;
+            padding:18px 40px;
+            background:rgba(0,0,0,0.65);
+            backdrop-filter:blur(12px);
+            position:fixed;
+            top:0;
+            width:100%;
+            z-index:1000;
+            box-shadow:0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            font-size:28px;
+            font-weight:700;
+            color:#ff3c3c;
+        }
+
+        nav {
+            display:flex;
+            flex-wrap:wrap;
+            gap:14px;
+            max-width:80%;
+        }
+
+        nav a {
+            color:white;
+            text-decoration:none;
+            font-weight:500;
+            transition:0.3s ease;
+            font-size:14px;
+        }
+
+        nav a:hover {
+            color:#ff3c3c;
+            transform:translateY(-2px);
+        }
+
+        .overlay {
+            background:rgba(0,0,0,0.72);
+            min-height:100vh;
+            padding-top:110px;
+        }
+
+        .page-title {
+            text-align:center;
+            font-size:42px;
+            font-weight:700;
+            margin-bottom:40px;
+        }
+
+        .grid {
+            display:flex;
+            flex-wrap:wrap;
+            justify-content:center;
+            gap:25px;
+            padding:40px;
+        }
+
+        .card, .glass-card {
+            width:300px;
+            padding:20px;
+            border-radius:18px;
+            overflow:hidden;
+            background:rgba(255,255,255,0.08);
+            backdrop-filter:blur(12px);
+            border:1px solid rgba(255,255,255,0.12);
+            box-shadow:0 8px 25px rgba(0,0,0,0.25);
+            transition:all 0.3s ease;
+        }
+
+        .card:hover, .glass-card:hover {
+            transform:translateY(-6px);
+        }
+
+        .card img {
+            width:100%;
+            height:200px;
+            object-fit:cover;
+            border-radius:12px;
+        }
+
+        .auth-card {
+            max-width:380px;
+            margin:auto;
+            padding:40px;
+            border-radius:18px;
+            background:rgba(255,255,255,0.08);
+            backdrop-filter:blur(12px);
+            border:1px solid rgba(255,255,255,0.12);
+        }
+
+        .btn {
+            display:inline-block;
+            background:linear-gradient(45deg,#ff0000,#ff7300);
+            border:none;
+            padding:12px 18px;
+            color:white;
+            border-radius:10px;
+            cursor:pointer;
+            text-decoration:none;
+            font-weight:600;
+            transition:0.3s;
+        }
+
+        .btn:hover {
+            transform:scale(1.05);
+        }
+
+        .input, input, select, textarea {
+            width:100%;
+            padding:12px;
+            border:none;
+            outline:none;
+            border-radius:10px;
+            margin-bottom:15px;
+            background:rgba(255,255,255,0.12);
+            color:white;
+        }
+
+        @media(max-width:768px) {
+            header {
+                padding:15px 20px;
+            }
+
+            nav {
+                max-width:100%;
+                gap:10px;
+                margin-top:10px;
+            }
+
+            .page-title {
+                font-size:32px;
+            }
+
+            .grid {
+                padding:20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="logo">F1 Tickets</div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/events">Events</a>
+        <a href="/experience">Experiences</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/my-tickets">My Tickets</a>
+        <a href="/merchandise">Merchandise</a>
+        <a href="/cart">Cart</a>
+        <a href="/my-orders">My Orders</a>
+        <a href="/recommendations">AI Picks</a>
+        <a href="/admin">Admin</a>
+        <a href="/analytics">Analytics</a>
+        {% if session.get("user") %}
+        <a href="/logout">Logout</a>
+        {% else %}
+        <a href="/login-page">Login</a>
+        {% endif %}
+    </nav>
+</header>
+
+<!-- Overlay div for page background -->
+<div class="overlay">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

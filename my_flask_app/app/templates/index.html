@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+url('{{ url_for('static', filename='images/f1-home.jpg') }}');
+background-size:cover;
+background-position:center;
+min-height:100vh;
+">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+padding:80px 40px;
+color:white;
+gap:30px;
+">
+
+    <!-- LEFT: F1 Timeline -->
+    <div class="card-side">
+        <h2>📜 F1 History Timeline</h2>
+        <ul class="timeline-list">
+            {% for year, event in timeline %}
+            <li>
+                {{ year }} → {{ event }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- CENTER: Hero -->
+    <div style="width:45%; text-align:center; padding-top:40px;">
+        <h1 class="hero-title">
+        🏎 F1 Grand Prix Tickets
+        </h1>
+
+        <p class="hero-subtitle">
+        Speed • Precision • Luxury
+        </p>
+
+        <p class="hero-text">
+        Welcome to the ultimate Formula 1 digital fan platform where you can
+        book Grand Prix tickets, explore race history, purchase official
+        team merchandise, track live orders, and experience the thrill of
+        the championship season through real-time insights.
+        </p>
+
+        <button class="btn" onclick="window.location.href='/events'">
+        🎟 Explore Events
+        </button>
+
+        <div style="margin-top:20px; display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+            <button class="btn" onclick="window.location.href='/merchandise'">
+                🛍 Shop Merch
+            </button>
+            <button class="btn" onclick="window.location.href='/dashboard'">
+                📊 Dashboard
+            </button>
+        </div>
+
+        <img 
+        src="{{ url_for('static', filename='images/f1-race-car.png') }}"
+        style="
+        width:100%;
+        max-width:520px;
+        margin-top:30px;
+        border-radius:18px;
+        box-shadow:0 0 25px rgba(255,0,0,0.4);
+        ">
+    </div>
+
+    <!-- RIGHT: Live News -->
+    <div class="card-side" style="max-height:520px; overflow:hidden;">
+        <h2>📰 Latest F1 News</h2>
+        <div style="height:420px; overflow-y:auto; padding-right:8px;">
+            {% for news in latest_news %}
+            <p class="news-item">
+                {{ news }}
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<!-- ✅ Reusable CSS for cards, buttons, timeline, news -->
+<style>
+.card-side {
+    width:25%;
+    background: rgba(0,0,0,0.55);
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(255,0,0,0.15);
+}
+
+.timeline-list {
+    line-height:2.2;
+    list-style:none;
+    padding-left:0;
+    font-size:16px;
+}
+
+.timeline-list li {
+    padding:8px 0;
+    border-left:3px solid red;
+    padding-left:12px;
+}
+
+.hero-title {
+    font-size:60px;
+    background: linear-gradient(90deg,#ff0000,#ff8c00);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.hero-subtitle {
+    font-size:22px;
+    margin:20px 0;
+    color:white;
+}
+
+.hero-text {
+    font-size:18px;
+    line-height:1.8;
+    margin-top:20px;
+    color:#ddd;
+}
+
+.news-item {
+    padding:12px;
+    background:rgba(255,255,255,0.08);
+    border-radius:10px;
+    margin-bottom:15px;
+}
+
+.btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: #00ff99;
+    color: black;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    background: #00cc7a;
+}
+</style>
+
+<script>
+window.addEventListener("load", function () {
+    document.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+            document.body.style.opacity = "0.5";
+        });
+    });
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Admin OMS{% endblock %}
+
+{% block content %}
+<div class="overlay" style="
+    background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)),
+                url('{{ url_for('static', filename='images/admin-bg.jpg') }}');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    padding: 60px;
+    color: white;
+">
+
+<h1 style="
+    text-align: center;
+    margin-bottom: 40px;
+    padding-top: 40px;
+">
+👨‍💼 Admin Order Management System
+</h1>
+
+<!-- ✅ SUMMARY METRICS -->
+<div style="
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    margin-bottom: 50px;
+">
+    <div class="card" style="padding:25px; text-align:center;">
+        <h2>Total Users</h2>
+        <p style="font-size:32px; font-weight:bold;">{{ total_users }}</p>
+    </div>
+
+    <div class="card" style="padding:25px; text-align:center;">
+        <h2>Total Tickets</h2>
+        <p style="font-size:32px; font-weight:bold;">{{ total_tickets }}</p>
+    </div>
+
+    <div class="card" style="padding:25px; text-align:center;">
+        <h2>Total Orders</h2>
+        <p style="font-size:32px; font-weight:bold;">{{ total_orders }}</p>
+    </div>
+
+    <div class="card" style="padding:25px; text-align:center;">
+        <h2>Revenue</h2>
+        <p style="font-size:32px; font-weight:bold; color:#00ff99;">
+            ₹{{ revenue }}
+        </p>
+    </div>
+</div>
+
+<!-- ✅ ORDER MANAGEMENT -->
+<h2 style="
+    margin-top: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+">
+📦 Manage Orders
+</h2>
+
+{% if recent_orders %}
+<div style="
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 25px;
+">
+    {% for order in recent_orders %}
+    <div class="card" style="
+        padding: 25px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 15px;
+        transition: 0.3s;
+    " onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0px)'">
+        <p><b>👤 User:</b> {{ order[1] }}</p>
+        <p><b>📦 Tracking:</b> {{ order[2] }}</p>
+        <p><b>📍 Current Status:</b> <span style="color:#00ff99;">{{ order[3] }}</span></p>
+
+        <!-- ✅ STATUS UPDATE FORM -->
+        <form method="POST" action="/update-order-status/{{ order[0] }}" style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+            <select name="status" class="btn" style="padding:10px; min-width:200px;">
+                <option {% if order[3] == "Order Confirmed" %}selected{% endif %}>Order Confirmed</option>
+                <option {% if order[3] == "Packed" %}selected{% endif %}>Packed</option>
+                <option {% if order[3] == "Shipped" %}selected{% endif %}>Shipped</option>
+                <option {% if order[3] == "Out for Delivery" %}selected{% endif %}>Out for Delivery</option>
+                <option {% if order[3] == "Delivered" %}selected{% endif %}>Delivered</option>
+            </select>
+
+            <button type="submit" class="btn">✅ Update</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="card" style="
+    margin-top:20px;
+    padding:30px;
+    text-align:center;
+    color:#ff6666;
+    max-width:600px;
+    margin-left:auto;
+    margin-right:auto;
+">
+No orders available 🚫
+</div>
+{% endif %}
+
+</div>
+{% endblock %}

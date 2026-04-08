@@ -1,0 +1,58 @@
+/* Reset default margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #111;
+    color: #fff;
+    min-height: 100vh;
+}
+
+/* Overlay backgrounds for pages */
+.overlay {
+    background:
+        linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+        url('../images/f1-home.jpg'); /* change per page */
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+}
+
+/* Login container */
+.login-container {
+    width: 350px;
+    margin: 100px auto;
+    padding: 20px;
+    background: rgba(0,0,0,0.8);
+    border-radius: 10px;
+}
+
+.login-container input,
+.login-container button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: none;
+}
+
+.login-container button {
+    background-color: #e10600;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Dashboard links */
+.dashboard a {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 15px;
+    background: #e10600;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #fff;
+}

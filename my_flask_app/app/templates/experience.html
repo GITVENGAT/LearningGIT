@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Experiences{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),
+url('{{ url_for('static', filename='images/f1-banner.jpg') }}');
+background-size:cover;
+background-position:center;
+min-height:100vh;
+padding:40px;
+">
+
+<h1 style="text-align:center; margin-bottom:40px;">
+🏁 Premium F1 Experiences
+</h1>
+
+<div class="grid" style="
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+">
+
+    <div class="card" onclick="showSummary('pitwalk')">
+        <img src="{{ url_for('static', filename='images/f1-car.jpg') }}">
+        <h3>Pit Lane Walk</h3>
+    </div>
+
+    <div class="card" onclick="showSummary('garage')">
+        <img src="{{ url_for('static', filename='images/f1-home.jpg') }}">
+        <h3>Garage Tour</h3>
+    </div>
+
+    <div class="card" onclick="showSummary('podium')">
+        <img src="{{ url_for('static', filename='images/f1-banner.jpg') }}">
+        <h3>Podium Celebration</h3>
+    </div>
+
+    <div class="card" onclick="showSummary('simulator')">
+        <img src="{{ url_for('static', filename='images/f1-home.jpg') }}">
+        <h3>Racing Simulator</h3>
+    </div>
+
+    <div class="card" onclick="showSummary('hospitality')">
+        <img src="{{ url_for('static', filename='images/f1-banner.jpg') }}">
+        <h3>VIP Hospitality</h3>
+    </div>
+
+    <div class="card" onclick="showSummary('meetdriver')">
+        <img src="{{ url_for('static', filename='images/f1-car.jpg') }}">
+        <h3>Meet The Drivers</h3>
+    </div>
+
+</div>
+
+<!-- FULLSCREEN MODAL BACKDROP -->
+<div id="summaryBackdrop">
+    <div id="summaryModal">
+        <h2 id="modalTitle"></h2>
+        <p id="modalText"></p>
+        <button class="btn" onclick="closeModal()">Close</button>
+    </div>
+</div>
+
+<!-- ✅ Inline CSS for cards, hover, modal & buttons -->
+<style>
+.grid .card {
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    overflow: hidden;
+    border-radius:12px;
+    background: rgba(255,255,255,0.05);
+    text-align:center;
+}
+
+.grid .card img {
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    transition: transform 0.3s;
+}
+
+.grid .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,255,153,0.4);
+}
+
+.grid .card:hover img {
+    transform: scale(1.05);
+}
+
+h3 {
+    padding:15px 10px 20px 10px;
+    color:white;
+}
+
+#summaryBackdrop {
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.65);
+    z-index:999;
+}
+
+#summaryModal {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:rgba(15,15,15,0.98);
+    padding:35px;
+    width:60%;
+    max-height:80vh;
+    overflow-y:auto;
+    border-radius:22px;
+    box-shadow:0 0 35px rgba(255,0,0,0.45);
+    border:1px solid rgba(255,255,255,0.08);
+    color:white;
+}
+
+#summaryModal p {
+    line-height:1.8;
+    margin-top:20px;
+}
+
+.btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: #00ff99;
+    color: black;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    background: #00cc7a;
+}
+</style>
+
+<script>
+const summaries = {
+pitwalk: {title:"Pit Lane Walk", text:"Walk through the most exclusive part of the Formula 1 circuit where teams prepare their cars before the race. Fans can closely witness tire strategies, engineering details, and live pit stop rehearsals. This experience offers an unmatched behind-the-scenes view into the speed and precision of race-day operations. You can watch crew coordination, car setup, and last-minute adjustments. The atmosphere is filled with adrenaline as mechanics work under intense time pressure. It’s a rare opportunity to feel the pulse of the paddock."},
+garage: {title:"Garage Tour", text:"Step inside the team garages and explore how Formula 1 cars are maintained and tuned. This experience includes access to car components, telemetry displays, and team tools. Learn how engineers optimize aerodynamics, brakes, and tire performance. Visitors can understand the complexity of hybrid power units and race strategy planning. The garage environment reveals the technical brilliance behind each lap."},
+podium: {title:"Podium Celebration", text:"Experience the thrill of standing near the podium after the chequered flag. Watch drivers celebrate victory with champagne sprays, team cheers, and trophy moments. This experience captures the emotional climax of a race weekend. You’ll enjoy the electrifying crowd roar and witness historic celebrations from close proximity."},
+simulator: {title:"Racing Simulator", text:"Drive a professional Formula 1 racing simulator built with realistic track physics and cockpit controls. Experience steering precision, braking points, and tire management on iconic circuits. This gives fans a taste of what drivers feel during high-speed corners and overtakes. Perfect for testing reflexes and racing instincts."},
+hospitality: {title:"VIP Hospitality", text:"Enjoy premium race viewing lounges with gourmet food, luxury seating, and trackside panoramic views. This includes exclusive services, driver interviews, and insider commentary. Fans enjoy the Grand Prix weekend in ultimate comfort while staying connected to every racing moment."},
+meetdriver: {title:"Meet The Drivers", text:"Get a once-in-a-lifetime chance to interact with Formula 1 drivers. Fans can take photos, receive signed merchandise, and hear exclusive stories from race weekends. This experience creates unforgettable memories with the stars of motorsport."}
+};
+
+function showSummary(type){
+    document.getElementById("summaryBackdrop").style.display = "block";
+    document.getElementById("modalTitle").innerText = summaries[type].title;
+    document.getElementById("modalText").innerText = summaries[type].text;
+}
+
+function closeModal(){
+    document.getElementById("summaryBackdrop").style.display = "none";
+}
+</script>
+
+{% endblock %}

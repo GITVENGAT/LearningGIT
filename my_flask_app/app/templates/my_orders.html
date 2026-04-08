@@ -1,0 +1,119 @@
+<!-- ========================= my_orders.html ========================= -->
+{% extends "base.html" %}
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.82),rgba(0,0,0,0.82)),
+url('{{ url_for('static', filename='images/f1-banner.jpg') }}');
+background-size:cover;
+background-position:center;
+min-height:100vh;
+padding:40px;
+color:white;
+">
+
+<h1 class="page-title" style="text-align:center; margin-bottom:50px;">
+📦 My Orders & Live Tracking
+</h1>
+
+{% if orders %}
+{% for order in orders %}
+<div class="glass-card" style="
+margin-bottom:40px;
+padding:25px;
+color:white;
+width:100%;
+max-width:900px;
+margin-left:auto;
+margin-right:auto;
+background:rgba(0,0,0,0.45);
+border-radius:18px;
+backdrop-filter:blur(12px);
+box-shadow:0 8px 25px rgba(0,0,0,0.35);
+border:1px solid rgba(255,255,255,0.1);
+">
+
+    <h3>📦 Tracking ID: {{ order.tracking_id }}</h3>
+    <p>📍 {{ order.address }}</p>
+    <p>📞 {{ order.phone }}</p>
+    <p>📧 {{ order.email }}</p>
+    <p><b>Status:</b> {{ order.status }}</p>
+
+    <hr style="margin:20px 0;border-color:rgba(255,255,255,0.1);">
+
+    <h3>🚚 Shipment Timeline</h3>
+
+    <div style="display:flex;flex-direction:column;gap:15px;margin-top:20px;">
+        {% for log in order.logs %}
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            padding:14px 18px;
+            border-radius:12px;
+            background:
+            {% if loop.index0 <= order.progress_index %}
+            rgba(0,255,120,0.18)
+            {% else %}
+            rgba(255,255,255,0.04)
+            {% endif %};
+            transition:0.2s;
+        ">
+            <span>
+                {% if loop.index0 <= order.progress_index %}✅{% else %}⏳{% endif %}
+                {{ log.stage }}
+            </span>
+            <span style="font-size:13px;color:#bbb;">{{ log.time }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div style="text-align:center;margin-top:25px;">
+        <a href="/notifications" class="btn">🔔 View Notifications</a>
+    </div>
+
+</div>
+{% endfor %}
+{% else %}
+<div class="glass-card" style="
+max-width:600px;
+margin:40px auto;
+text-align:center;
+padding:40px;
+color:#ff8888;
+background:rgba(0,0,0,0.45);
+border-radius:18px;
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,0.1);
+">
+No orders placed yet 🚫
+</div>
+{% endif %}
+
+</div>
+
+<style>
+.btn {
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+    background:#00ff99;
+    color:black;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.2s;
+    text-decoration:none;
+}
+
+.btn:hover {
+    background:#00cc7a;
+}
+
+.glass-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,255,0,0.2);
+}
+</style>
+
+{% endblock %}

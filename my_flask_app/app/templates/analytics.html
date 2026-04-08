@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block title %}Analytics{% endblock %}
+
+{% block content %}
+<div
+    id="analytics-data"
+    data-ticket-labels='{{ ticket_labels | default([]) | tojson }}'
+    data-ticket-values='{{ ticket_values | default([]) | tojson }}'
+    data-order-labels='{{ order_labels | default([]) | tojson }}'
+    data-order-values='{{ order_values | default([]) | tojson }}'
+    data-category-labels='{{ category_labels | default([]) | tojson }}'
+    data-category-values='{{ category_values | default([]) | tojson }}'
+    data-team-labels='{{ team_labels | default([]) | tojson }}'
+    data-team-values='{{ team_values | default([]) | tojson }}'
+    data-revenue-labels='{{ revenue_labels | default([]) | tojson }}'
+    data-revenue-values='{{ revenue_values | default([]) | tojson }}'
+    class="overlay"
+    style="
+        background:
+        linear-gradient(rgba(0,0,0,0.88), rgba(0,0,0,0.88)),
+        url('{{ url_for('static', filename='images/analytics-bg.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+        padding: 40px;
+        color:white;
+    "
+>
+    <h1 style="text-align:center; padding-top:70px; margin-bottom:40px;">
+        📊 F1 Marketplace Analytics Intelligence
+    </h1>
+
+    <!-- KPI STRIP -->
+    <div style="
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        gap:20px;
+        margin-bottom:40px;
+    ">
+        <div class="card" style="padding:25px;text-align:center;">
+            <h3>🎟 Tickets</h3>
+            <p id="ticketTotal" style="font-size:28px;margin-top:10px;">0</p>
+        </div>
+
+        <div class="card" style="padding:25px;text-align:center;">
+            <h3>📦 Orders</h3>
+            <p id="orderTotal" style="font-size:28px;margin-top:10px;">0</p>
+        </div>
+
+        <div class="card" style="padding:25px;text-align:center;">
+            <h3>💰 Revenue</h3>
+            <p id="revenueTotal" style="font-size:28px;margin-top:10px;">₹0</p>
+        </div>
+
+        <div class="card" style="padding:25px;text-align:center;">
+            <h3>🏎 Top Team</h3>
+            <p id="topTeam" style="font-size:24px;margin-top:10px;">-</p>
+        </div>
+    </div>
+
+    <!-- CHARTS -->
+    {% for chart_id, title in [
+        ("ticketChart", "🎟 Ticket Demand by Event"),
+        ("orderChart", "📦 Orders by Delivery Zone"),
+        ("categoryChart", "🛍 Best Selling Categories"),
+        ("teamChart", "🏎 Team Merchandise Split"),
+        ("revenueChart", "💰 Revenue Growth Trend")
+    ] %}
+    <div class="card" style="
+        width:90%;
+        margin:30px auto;
+        padding:30px;
+        background:rgba(255,255,255,0.06);
+    ">
+        <h2 style="text-align:center; margin-bottom:20px;">{{ title }}</h2>
+        <canvas id="{{ chart_id }}"></canvas>
+    </div>
+    {% endfor %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const analyticsData = document.getElementById("analytics-data");
+
+    const ticketLabels = JSON.parse(analyticsData.dataset.ticketLabels);
+    const ticketValues = JSON.parse(analyticsData.dataset.ticketValues);
+    const orderLabels = JSON.parse(analyticsData.dataset.orderLabels);
+    const orderValues = JSON.parse(analyticsData.dataset.orderValues);
+    const categoryLabels = JSON.parse(analyticsData.dataset.categoryLabels);
+    const categoryValues = JSON.parse(analyticsData.dataset.categoryValues);
+    const teamLabels = JSON.parse(analyticsData.dataset.teamLabels);
+    const teamValues = JSON.parse(analyticsData.dataset.teamValues);
+    const revenueLabels = JSON.parse(analyticsData.dataset.revenueLabels);
+    const revenueValues = JSON.parse(analyticsData.dataset.revenueValues);
+
+    // KPI CALCULATIONS
+    const totalTickets = ticketValues.reduce((a,b)=>a+b,0);
+    const totalOrders = orderValues.reduce((a,b)=>a+b,0);
+    const totalRevenue = revenueValues.reduce((a,b)=>a+b,0);
+
+    let topTeam = "-";
+    if (teamValues.length > 0) {
+        const maxIndex = teamValues.indexOf(Math.max(...teamValues));
+        topTeam = teamLabels[maxIndex];
+    }
+
+    document.getElementById("ticketTotal").innerText = totalTickets;
+    document.getElementById("orderTotal").innerText = totalOrders;
+    document.getElementById("revenueTotal").innerText = "₹" + totalRevenue;
+    document.getElementById("topTeam").innerText = topTeam;
+
+    const commonOptions = {
+        responsive: true,
+        plugins: {
+            legend: { labels: { color: "white" } }
+        },
+        scales: {
+            x: { ticks: { color: "white" } },
+            y: { beginAtZero: true, ticks: { color: "white" } }
+        }
+    };
+
+    new Chart(document.getElementById("ticketChart"), {
+        type: "bar",
+        data: { labels: ticketLabels, datasets: [{ label: "Tickets", data: ticketValues, borderWidth: 1 }] },
+        options: commonOptions
+    });
+
+    new Chart(document.getElementById("orderChart"), {
+        type: "line",
+        data: { labels: orderLabels, datasets: [{ label: "Orders", data: orderValues, borderWidth: 2, tension: 0.3 }] },
+        options: commonOptions
+    });
+
+    new Chart(document.getElementById("categoryChart"), {
+        type: "bar",
+        data: { labels: categoryLabels, datasets: [{ label: "Categories", data: categoryValues, borderWidth: 1 }] },
+        options: commonOptions
+    });
+
+    new Chart(document.getElementById("teamChart"), {
+        type: "pie",
+        data: { labels: teamLabels, datasets: [{ data: teamValues }] },
+        options: {
+            responsive: true,
+            plugins: { legend: { labels: { color: "white" } } }
+        }
+    });
+
+    new Chart(document.getElementById("revenueChart"), {
+        type: "line",
+        data: { labels: revenueLabels, datasets: [{ label: "Revenue ₹", data: revenueValues, borderWidth: 2, tension: 0.3 }] },
+        options: commonOptions
+    });
+});
+</script>
+{% endblock %}

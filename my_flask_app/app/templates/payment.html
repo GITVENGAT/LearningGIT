@@ -1,0 +1,117 @@
+<!-- ========================= payment.html ========================= -->
+{% extends "base.html" %}
+{% block title %}Premium Payment Gateway{% endblock %}
+
+{% block content %}
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.88),rgba(0,0,0,0.88)),
+url('https://images.unsplash.com/photo-1556740749-887f6717d7e4');
+background-size:cover;
+background-position:center;
+min-height:100vh;
+padding:60px;
+color:white;
+">
+
+<h1 class="page-title" style="text-align:center;margin-bottom:50px;">
+💳 F1 Premium Payment Gateway
+</h1>
+
+<div class="glass-card" style="padding:25px; max-width:600px; margin:auto; margin-bottom:40px;">
+    <h2>🧾 Order Summary</h2>
+    <p><b>Subtotal:</b> ₹{{ subtotal }}</p>
+    <p><b>Delivery:</b> ₹{{ delivery }}</p>
+    <h3><b>Total Payable:</b> ₹{{ total }}</h3>
+</div>
+
+<div class="grid" style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+padding:0 20px;
+margin-bottom:40px;
+">
+    <div class="glass-card" style="text-align:center;">
+        <h3>📱 UPI</h3>
+        <button class="btn pay-btn" onclick="pay('UPI')">Pay ₹{{ total }}</button>
+    </div>
+
+    <div class="glass-card" style="text-align:center;">
+        <h3>💳 Card</h3>
+        <button class="btn pay-btn" onclick="pay('Card')">Pay ₹{{ total }}</button>
+    </div>
+
+    <div class="glass-card" style="text-align:center;">
+        <h3>💵 COD</h3>
+        <button class="btn pay-btn" onclick="pay('COD')">Confirm COD</button>
+    </div>
+</div>
+
+<div id="paymentResult" style="text-align:center;margin-top:40px;"></div>
+
+<script>
+async function pay(method){
+    const resultBox = document.getElementById("paymentResult");
+    const buttons = document.querySelectorAll(".pay-btn");
+    buttons.forEach(btn => btn.disabled = true);
+
+    resultBox.innerHTML = "<h2>⏳ Processing payment...</h2>";
+
+    try {
+        const res = await fetch("/process-payment", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ method })
+        });
+
+        const payment = await res.json();
+
+        if(payment.msg === "Cart is empty"){
+            resultBox.innerHTML = "<h2>❌ Cart is empty</h2>";
+            buttons.forEach(btn => btn.disabled = false);
+            return;
+        }
+
+        const payload = {
+            pincode: localStorage.getItem("pincode"),
+            address: localStorage.getItem("address"),
+            phone: localStorage.getItem("phone"),
+            alt_phone: localStorage.getItem("alt_phone"),
+            email: localStorage.getItem("email")
+        };
+
+        const orderRes = await fetch("/place-order", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(payload)
+        });
+
+        const order = await orderRes.json();
+
+        resultBox.innerHTML = `
+            <div class="glass-card" style="max-width:650px;margin:auto;">
+                <h2>✅ Payment Successful</h2>
+                <p>Transaction: ${payment.transaction_id}</p>
+                <p>Tracking ID: ${order.tracking_id}</p>
+                <a href="/invoice/${order.tracking_id}/${payment.transaction_id}" class="btn">
+                    📄 Download Invoice
+                </a>
+            </div>
+        `;
+
+        localStorage.clear();
+
+        setTimeout(() => {
+            window.location.href = "/my-orders";
+        }, 4000);
+
+    } catch(error) {
+        resultBox.innerHTML = "<h2>❌ Payment Failed</h2>";
+        buttons.forEach(btn => btn.disabled = false);
+    }
+}
+</script>
+
+</div>
+{% endblock %}

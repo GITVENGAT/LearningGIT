@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Merchandise{% endblock %}
+
+{% block content %}
+
+<div class="overlay" style="
+background:
+linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+url('https://images.unsplash.com/photo-1503376780353-7e6692767b70');
+background-size:cover;
+background-position:center;
+min-height:100vh;
+padding:60px;
+">
+
+<h1 style="text-align:center; margin-bottom:50px; color:white;">
+🏎 F1 Team Merchandise Store
+</h1>
+
+<div class="grid" style="
+display:grid;
+grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+gap:25px;
+width:90%;
+margin:auto;
+">
+
+{% for c in categories %}
+<div class="card" style="padding:25px; text-align:center; background:rgba(255,255,255,0.08); border-radius:15px; cursor:pointer; transition:0.3s;">
+    <h3>{{ c }}</h3>
+    <p style="color:#ddd; margin:12px 0;">Explore premium {{ c }} collection</p>
+
+    <button class="btn" onclick="window.location.href='/category/{{ c }}'">
+        Open Category
+    </button>
+</div>
+{% endfor %}
+
+</div>
+
+</div>
+
+<style>
+.btn {
+    padding:12px 18px;
+    border:none;
+    border-radius:10px;
+    background:#00ff99;
+    color:black;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.btn:hover {
+    background:#00cc7a;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,255,0,0.2);
+}
+</style>
+
+{% endblock %}
